@@ -21,7 +21,7 @@ public class Main {
         saveGame("C:\\games\\Games\\savegames\\player3.dat", player3);
         zipFiles("C:\\games\\Games\\savegames\\zip.zip", pathList);
 
-        for (int i = 0; i < pathList.size() - 1; i++) {
+        for (int i = 0; i < pathList.size(); i++) {
             deleteFile(pathList.get(i));
         }
 
@@ -29,7 +29,7 @@ public class Main {
     }
 
     public static void saveGame(String path, GameProgress player) {
-        File Games_savegames = new File(path);
+        File gamesSavegames = new File(path);
         try (FileOutputStream fos = new FileOutputStream(path)) {
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(player);
@@ -40,34 +40,28 @@ public class Main {
     }
 
     public static void zipFiles(String zip_path, List<String> pathList) {
-        try {
-            ZipOutputStream zout = new ZipOutputStream(new FileOutputStream(zip_path));
+        for (int i = 0; i < pathList.size() - 1; i++) {
             try {
-                for (int i = 0; i < pathList.size() - 1; i++) {
-                    FileInputStream fis = new FileInputStream(pathList.get(i));
-                    ZipEntry entry = new ZipEntry("player" + i + 1 + ".dat");
-                    zout.putNextEntry(entry);
-                    byte[] buffer = new byte[fis.available()];
-                    fis.read(buffer);
-                    zout.write(buffer);
-                    zout.closeEntry();
-                }
+                ZipOutputStream zout = new ZipOutputStream(new FileOutputStream(zip_path));
+                FileInputStream fis = new FileInputStream(pathList.get(i));
+                ZipEntry entry = new ZipEntry("zip_player" + i + ".dat");
+                zout.putNextEntry(entry);
+                byte[] buffer = new byte[fis.available()];
+                fis.read(buffer);
+                zout.write(buffer);
+                zout.closeEntry();
 
-            } catch (IOException iox) {
-                System.out.println(iox.getMessage());
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage());
             }
-
-
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
         }
-
     }
 
-    public static void deleteFile(String path) {
-        File file = new File(path);
-        if (file.delete()) {
-            System.out.println("Deleted");
-        } else System.out.println("Exception");
+        public static void deleteFile(String path) {
+            File file = new File(path);
+            if (file.delete()) {
+                System.out.println("Deleted");
+            } else System.out.println("Exception delete");
+        }
     }
-}
+
