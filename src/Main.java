@@ -43,13 +43,17 @@ public class Main {
         for (int i = 0; i < pathList.size() - 1; i++) {
             try {
                 ZipOutputStream zout = new ZipOutputStream(new FileOutputStream(zip_path));
-                FileInputStream fis = new FileInputStream(pathList.get(i));
-                ZipEntry entry = new ZipEntry("zip_player" + i + ".dat");
-                zout.putNextEntry(entry);
-                byte[] buffer = new byte[fis.available()];
-                fis.read(buffer);
-                zout.write(buffer);
-                zout.closeEntry();
+                try {
+                    FileInputStream fis = new FileInputStream(pathList.get(i));
+                    ZipEntry entry = new ZipEntry("zip_player" + i + ".dat");
+                    zout.putNextEntry(entry);
+                    byte[] buffer = new byte[fis.available()];
+                    fis.read(buffer);
+                    zout.write(buffer);
+                    zout.closeEntry();
+                } catch (IOException iox) {
+                    System.out.println(iox.getMessage());
+                }
 
             } catch (Exception ex) {
                 System.out.println(ex.getMessage());
