@@ -40,11 +40,11 @@ public class Main {
     }
 
     public static void zipFiles(String zip_path, List<String> pathList) {
-        for (int i = 0; i < pathList.size() - 1; i++) {
-            try {
-                ZipOutputStream zout = new ZipOutputStream(new FileOutputStream(zip_path));
-                try {
-                    FileInputStream fis = new FileInputStream(pathList.get(i));
+        try (ZipOutputStream zout = new ZipOutputStream(new FileOutputStream(zip_path))) {
+            for (int i = 0; i < pathList.size(); i++) {
+
+                try (FileInputStream fis = new FileInputStream(pathList.get(i))) {
+
                     ZipEntry entry = new ZipEntry("zip_player" + i + ".dat");
                     zout.putNextEntry(entry);
                     byte[] buffer = new byte[fis.available()];
@@ -54,12 +54,13 @@ public class Main {
                 } catch (IOException iox) {
                     System.out.println(iox.getMessage());
                 }
+            }
 
             } catch (Exception ex) {
                 System.out.println(ex.getMessage());
             }
         }
-    }
+
 
         public static void deleteFile(String path) {
             File file = new File(path);
